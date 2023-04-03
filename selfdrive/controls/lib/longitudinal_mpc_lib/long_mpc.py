@@ -60,6 +60,9 @@ STOP_DISTANCE = 6.0
 
 params2 = Params()
 
+if not params2.get("SEMIPILOT_distance"):
+  params2.put("SEMIPILOT_distance", str(3))
+
 def get_T_FOLLOW():
   distance = int(params2.get("SEMIPILOT_distance"))
   if distance==0:
