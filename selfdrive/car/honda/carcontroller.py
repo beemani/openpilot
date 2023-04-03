@@ -274,6 +274,7 @@ class CarController:
                 self.last_distance += 1
               else:
                 self.last_distance = 0
+              put_nonblocking("distance", str(self.last_distance))
           if self.prev_cruise_setting == 1:
             if self.hold_counter > 5:
               #print("lkas hold")
