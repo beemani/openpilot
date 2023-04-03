@@ -289,7 +289,7 @@ class CarController:
             
         self.hold_counter = 0
       else:
-        self.hold_counter = self.hold_counter + 1 if self.cruise_setting != 0 else 0
+        self.hold_counter = self.hold_counter + 1 if self.cruise_setting != 0
         self.hold_ready = self.cruise_setting == 0
 
       self.prev_cruise_setting = CS.cruise_setting
