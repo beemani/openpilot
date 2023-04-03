@@ -262,26 +262,23 @@ class CarController:
 
       self.cruise_setting = CS.cruise_setting
       hold_state = self.hold_counter > 5
+      print(f'cruise_setting: {self.cruise_setting}, prev_cruise_setting: {self.prev_cruise_setting}, hold_ready: {hold_ready}, hold_state: {hold_state}')
 
       if self.hold_ready and (self.cruise_setting == 0 or hold_state or self.cruise_setting != self.prev_cruise_setting):
         if self.prev_cruise_setting == 3:
           if hold_state:
             # Distance button hold
-            print("Distance button hold")
             put_bool_nonblocking("ExperimentalMode", not self.params2.get_bool("ExperimentalMode"))
           else:
             # Distance button press
-            print("Distance button press")
             self.last_distance = (self.last_distance + 1) % 4
 
         elif self.prev_cruise_setting == 1:
           if hold_state:
             # LKAS button hold
-            print("LKAS button hold")
             pass
           else:
             # LKAS button press
-            print("LKAS button press")
             self.last_lkas = (self.last_lkas + 1) % 2
           
         if hold_state:
@@ -289,7 +286,7 @@ class CarController:
             
         self.hold_counter = 0
       else:
-        self.hold_counter = self.hold_counter + 1 if self.cruise_setting != 0
+        self.hold_counter = self.hold_counter + 1 if self.cruise_setting != 0 else 0
         self.hold_ready = self.cruise_setting == 0
 
       self.prev_cruise_setting = CS.cruise_setting
