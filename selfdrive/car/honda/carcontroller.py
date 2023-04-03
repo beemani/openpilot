@@ -261,29 +261,23 @@ class CarController:
                     hud_control.lanesVisible, fcw_display, acc_alert, steer_required)
       self.cruise_setting = CS.cruise_setting
 
-      if (self.cruise_setting != self.prev_cruise_setting or self.hold_counter > 5) and self.hold_ready:
-        if self.cruise_setting == 0 or self.hold_counter > 5:
+      if (self.cruise_setting != self.prev_cruise_setting or self.hold_counter > 4) and self.hold_ready:
+        if self.cruise_setting == 0 or self.hold_counter > 4:
           if self.prev_cruise_setting == 3:
-            if self.hold_counter > 5:
+            if self.hold_counter > 4:
               # distance hold
               self.hold_ready = False
               put_bool_nonblocking("ExperimentalMode", not self.params2.get_bool("ExperimentalMode"))
             else:
               # distance press
-              if self.last_distance < 3:
-                self.last_distance += 1
-              else:
-                self.last_distance = 0
+              self.last_distance = (self.last_distance + 1) % 4
           if self.prev_cruise_setting == 1:
-            if self.hold_counter > 5:
+            if self.hold_counter > 4:
               # lkas hold
               self.hold_ready = False
             else:
               # lkas press
-              if self.last_lkas < 1:
-                self.last_lkas += 1
-              else:
-                self.last_lkas = 0
+              self.last_lkas = (self.last_lkas + 1) % 2
           self.hold_counter = 0
       else:
         if self.cruise_setting != 0:
