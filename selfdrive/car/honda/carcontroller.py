@@ -125,8 +125,8 @@ class CarController:
     self.brake = 0.0
     self.last_steer = 0.0
 
-    self.last_distance = 0
-    self.last_lkas = 0
+    self.last_distance = 3
+    self.last_lkas = 1
     self.cruise_setting = 0
     self.prev_cruise_setting = 0
     self.hold_counter = 0
