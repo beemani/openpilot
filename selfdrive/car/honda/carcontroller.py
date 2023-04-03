@@ -125,13 +125,13 @@ class CarController:
     self.brake = 0.0
     self.last_steer = 0.0
 
-    self.last_distance = 3
+    self.params2 = Params()
+    self.last_distance = 3 if not params2.get("SEMIPILOT_distance") else int(params2.get("SEMIPILOT_distance"))
     self.last_lkas = 1
     self.cruise_setting = 0
     self.prev_cruise_setting = 0
     self.hold_counter = 0
     self.hold_ready = True
-    self.params2 = Params()
 
   def update(self, CC, CS, now_nanos):
     actuators = CC.actuators
