@@ -267,17 +267,21 @@ class CarController:
         if self.prev_cruise_setting == 3:
           if hold_state:
             # Distance button hold
+            print("Distance button hold")
             put_bool_nonblocking("ExperimentalMode", not self.params2.get_bool("ExperimentalMode"))
           else:
             # Distance button press
+            print("Distance button press")
             self.last_distance = (self.last_distance + 1) % 4
 
         elif self.prev_cruise_setting == 1:
           if hold_state:
             # LKAS button hold
+            print("LKAS button hold")
             pass
           else:
             # LKAS button press
+            print("LKAS button press")
             self.last_lkas = (self.last_lkas + 1) % 2
           
         if hold_state:
