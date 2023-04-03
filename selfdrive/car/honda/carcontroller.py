@@ -8,6 +8,7 @@ from selfdrive.car import create_gas_interceptor_command
 from selfdrive.car.honda import hondacan
 from selfdrive.car.honda.values import CruiseButtons, VISUAL_HUD, HONDA_BOSCH, HONDA_BOSCH_RADARLESS, HONDA_NIDEC_ALT_PCM_ACCEL, CarControllerParams
 from selfdrive.controls.lib.drive_helpers import rate_limit
+from common.params import Params, put_nonblocking, put_bool_nonblocking
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LongCtrlState = car.CarControl.Actuators.LongControlState
@@ -123,6 +124,14 @@ class CarController:
     self.gas = 0.0
     self.brake = 0.0
     self.last_steer = 0.0
+
+    self.last_distance = 0
+    self.last_lkas = 0
+    self.cruise_setting = 0
+    self.prev_cruise_setting = 0
+    self.hold_counter = 0
+    self.hold_ready = True
+    self.params2 = Params()
 
   def update(self, CC, CS, now_nanos):
     actuators = CC.actuators
@@ -250,7 +259,39 @@ class CarController:
     if self.frame % 10 == 0:
       hud = HUDData(int(pcm_accel), int(round(hud_v_cruise)), hud_control.leadVisible,
                     hud_control.lanesVisible, fcw_display, acc_alert, steer_required)
-      can_sends.extend(hondacan.create_ui_commands(self.packer, self.CP, CC.enabled, pcm_speed, hud, CS.is_metric, CS.acc_hud, CS.lkas_hud))
+      self.cruise_setting = CS.cruise_setting
+      if (self.cruise_setting != self.prev_cruise_setting or self.hold_counter > 5) and self.hold_ready:
+        if self.cruise_setting == 0 or self.hold_counter > 5:
+          if self.prev_cruise_setting == 3:
+            if self.hold_counter > 5:
+              #print("distance hold")
+              self.hold_ready = False
+              self.experimental_mode = self.params2.get_bool("ExperimentalMode")
+              put_bool_nonblocking("ExperimentalMode", not self.experimental_mode)
+            else:
+              #print("distance press")
+              if self.last_distance < 3:
+                self.last_distance += 1
+              else:
+                self.last_distance = 0
+          if self.prev_cruise_setting == 1:
+            if self.hold_counter > 5:
+              #print("lkas hold")
+              self.hold_ready = False
+            else:
+              #print("lkas press")
+              if self.last_lkas < 1:
+                self.last_lkas += 1
+              else:
+                self.last_lkas = 0
+          self.hold_counter = 0
+      else:
+        if self.cruise_setting != 0:
+          self.hold_counter += 1
+        else:
+          self.hold_ready = True
+      self.prev_cruise_setting = CS.cruise_setting
+      can_sends.extend(hondacan.create_ui_commands(self.packer, self.CP, CC.enabled, pcm_speed, hud, CS.is_metric, CS.acc_hud, CS.lkas_hud, self.last_distance, self.last_lkas))
 
       if self.CP.openpilotLongitudinalControl and self.CP.carFingerprint not in HONDA_BOSCH:
         self.speed = pcm_speed
