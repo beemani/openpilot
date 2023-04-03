@@ -126,7 +126,7 @@ class CarController:
     self.last_steer = 0.0
 
     self.params2 = Params()
-    self.last_distance = 3 if not params2.get("SEMIPILOT_distance") else int(params2.get("SEMIPILOT_distance"))
+    self.last_distance = 3 if not self.params2.get("SEMIPILOT_distance") else int(self.params2.get("SEMIPILOT_distance"))
     self.last_lkas = 1
     self.cruise_setting = 0
     self.prev_cruise_setting = 0
