@@ -264,22 +264,22 @@ class CarController:
         if self.cruise_setting == 0 or self.hold_counter > 5:
           if self.prev_cruise_setting == 3:
             if self.hold_counter > 5:
-              #print("distance hold")
+              # distance hold
               self.hold_ready = False
               self.experimental_mode = self.params2.get_bool("ExperimentalMode")
               put_bool_nonblocking("ExperimentalMode", not self.experimental_mode)
             else:
-              #print("distance press")
+              # distance press
               if self.last_distance < 3:
                 self.last_distance += 1
               else:
                 self.last_distance = 0
           if self.prev_cruise_setting == 1:
             if self.hold_counter > 5:
-              #print("lkas hold")
+              # lkas hold
               self.hold_ready = False
             else:
-              #print("lkas press")
+              # lkas press
               if self.last_lkas < 1:
                 self.last_lkas += 1
               else:
