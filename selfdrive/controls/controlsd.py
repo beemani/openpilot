@@ -183,8 +183,8 @@ class Controls:
     self.experimental_mode = False
     self.v_cruise_helper = VCruiseHelper(self.CP)
 
-    if params2.get("SEMIPILOT_lkas") is None:
-      params2.put("SEMIPILOT_lkas", str(1))
+    if self.params.get("SEMIPILOT_lkas") is None:
+      self.params.put("SEMIPILOT_lkas", str(1))
     self.semipilot_lkas = self.params.get("SEMIPILOT_lkas")
 
     # TODO: no longer necessary, aside from process replay
@@ -580,6 +580,7 @@ class Controls:
     standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
     CC.latActive = self.active and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
                    (not standstill or self.joystick_mode) and self.semipilot_lkas
+    print(CC.latActive)
     CC.longActive = self.enabled and not self.events.any(ET.OVERRIDE_LONGITUDINAL) and self.CP.openpilotLongitudinalControl
 
     actuators = CC.actuators
