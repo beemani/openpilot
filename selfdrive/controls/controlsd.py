@@ -843,7 +843,8 @@ class Controls:
 
     self.is_metric = self.params.get_bool("IsMetric")
     self.experimental_mode = self.params.get_bool("ExperimentalMode") and self.CP.openpilotLongitudinalControl
-    self.semipilot_lkas = bool(self.params.get("SEMIPILOT_lkas"))
+    self.semipilot_lkas = bool(int(self.params.get("SEMIPILOT_lkas")))
+    print(self.semipilot_lkas)
 
     # Sample data from sockets and get a carState
     CS = self.data_sample()
