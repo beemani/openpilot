@@ -60,8 +60,10 @@ STOP_DISTANCE = 8.0
 
 params2 = Params()
 
-if assertFalse(params2.get("SEMIPILOT_distance")):
-  params2.put("SEMIPILOT_distance", str(3))
+try:
+   params2.get("SEMIPILOT_distance")
+except NameError:
+   params2.put("SEMIPILOT_distance", str(3))
 
 def get_T_FOLLOW():
   distance = int(params2.get("SEMIPILOT_distance"))
