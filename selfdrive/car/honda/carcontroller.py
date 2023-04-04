@@ -270,7 +270,6 @@ class CarController:
               put_bool_nonblocking("ExperimentalMode", not self.params2.get_bool("ExperimentalMode"))
             else:
               # distance press
-              self.last_distance = (self.last_distance + 1) % 4
               self.last_distance = (self.last_distance - 1) % 4 or 3
               print(self.last_distance)
               put_nonblocking("SEMIPILOT_distance", str(self.last_distance))
