@@ -10,7 +10,7 @@ from common.params import Params
 
 
 values_idx = 0
-values = ["P", "I", "F", "ACCEL"]
+values = ["P", "I", "F"]
 
 
 ### based on https://stackoverflow.com/questions/510357/how-to-read-a-single-character-from-the-user
