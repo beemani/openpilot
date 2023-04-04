@@ -271,6 +271,8 @@ class CarController:
             else:
               # distance press
               self.last_distance = (self.last_distance + 1) % 4
+              self.last_distance = (self.last_distance - 1) % 4 or 3
+              print(self.last_distance)
               put_nonblocking("SEMIPILOT_distance", str(self.last_distance))
           if self.prev_cruise_setting == 1:
             if self.hold_counter > 4:
