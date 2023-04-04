@@ -149,7 +149,7 @@ def create_ui_commands(packer, CP, enabled, pcm_speed, hud, is_metric, acc_hud, 
   lkas_hud_values = {
     'SET_ME_X41': 0x41,
     'STEERING_REQUIRED': hud.steer_required,
-    'SOLID_LANES': hud.lanes_visible and last_lkas,
+    'SOLID_LANES': hud.lanes_visible or last_lkas,
     'BEEP': 0,
   }
 
