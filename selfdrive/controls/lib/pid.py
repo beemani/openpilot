@@ -2,7 +2,6 @@ import numpy as np
 from numbers import Number
 
 from common.numpy_fast import clip, interp
-from common.params import Params
 
 
 class PIDController():
@@ -52,11 +51,6 @@ class PIDController():
 
   def update(self, error, error_rate=0.0, speed=0.0, override=False, feedforward=0., freeze_integrator=False):
     self.speed = speed
-    if Params().get("TUNE_P") is not None:
-      self._k_p = [[0], [float(Params().get("TUNE_P"))]]
-      self._k_i = [[0], [float(Params().get("TUNE_I"))]]
-      self.kf = Params().get("TUNE_F")
-      print(f'TUNE_P: {self._k_p}, TUNE_I: {self._k_i}, TUNE_F: {self.kf}')
 
     self.p = float(error) * self.k_p
     self.f = feedforward * self.k_f
