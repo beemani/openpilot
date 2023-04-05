@@ -579,7 +579,7 @@ class Controls:
     if self.events.any(ET.OVERRIDE_LATERAL) and self.events.any(ET.OVERRIDE_LONGITUDINAL):
       self.last_override = self.sm.frame
     recent_override = (self.sm.frame - self.last_override) * DT_CTRL < 1.0
-    CC.latActive = (self.active or (self.params.get_bool('SEMIPILOT_SteerAlwaysOn') and not recent_override) and \
+    CC.latActive = (self.active or (self.params.get_bool('SEMIPILOT_SteerAlwaysOn') and not recent_override)) and \
                    not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
                    (not standstill or self.joystick_mode)
     CC.longActive = self.enabled and not self.events.any(ET.OVERRIDE_LONGITUDINAL) and self.CP.openpilotLongitudinalControl
