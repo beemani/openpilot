@@ -170,7 +170,7 @@ class Controls:
     self.can_rcv_timeout_counter = 0      # conseuctive timeout count
     self.can_rcv_cum_timeout_counter = 0  # cumulative timeout count
     self.last_blinker_frame = 0
-    self.last_lateral_override = 0
+    self.last_override = 0
     self.last_steering_pressed_frame = 0
     self.distance_traveled = 0
     self.last_functional_fan_frame = 0
@@ -576,10 +576,11 @@ class Controls:
     # Check which actuators can be enabled
     standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
 
-    if self.events.any(ET.OVERRIDE_LATERAL):
-      self.last_lateral_override = self.sm.frame
-    recent_lateral_override = (self.sm.frame - self.last_lateral_override) * DT_CTRL < 2.0
-    CC.latActive = ((self.active or self.params.get_bool('SEMIPILOT_SteerAlwaysOn')) and not recent_lateral_override) and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
+    if self.events.any(ET.OVERRIDE_LATERAL) and self.events.any(ET.OVERRIDE_LONGITUDINAL):
+      self.last_override = self.sm.frame
+    recent_override = (self.sm.frame - self.last_override) * DT_CTRL < 1.0
+    CC.latActive = (self.active or (self.params.get_bool('SEMIPILOT_SteerAlwaysOn') and not recent_override) and \
+                   not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
                    (not standstill or self.joystick_mode)
     CC.longActive = self.enabled and not self.events.any(ET.OVERRIDE_LONGITUDINAL) and self.CP.openpilotLongitudinalControl
 
