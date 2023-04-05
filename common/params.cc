@@ -203,7 +203,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"Offroad_UnofficialHardware", CLEAR_ON_MANAGER_START},
     {"Offroad_UpdateFailed", CLEAR_ON_MANAGER_START},
     {"SEMIPILOT_distance", PERSISTENT},
-    {"SEMIPILOT_SteerAlwaysOn", PERSISTENT},
+    {"SEMIPILOT_SteerAlwaysOn", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_ON},
 };
 
 } // namespace
