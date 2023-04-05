@@ -282,7 +282,7 @@ class CarController:
               self.hold_ready = False
             else:
               # lkas press
-              if CS.out.cruiseState.available
+              if CS.out.cruiseState.available:
                 self.last_lkas = not self.last_lkas
                 if self.last_lkas:
                   self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', True)
