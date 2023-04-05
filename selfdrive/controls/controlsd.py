@@ -170,6 +170,7 @@ class Controls:
     self.can_rcv_timeout_counter = 0      # conseuctive timeout count
     self.can_rcv_cum_timeout_counter = 0  # cumulative timeout count
     self.last_blinker_frame = 0
+    self.last_lateral_override = 0
     self.last_steering_pressed_frame = 0
     self.distance_traveled = 0
     self.last_functional_fan_frame = 0
