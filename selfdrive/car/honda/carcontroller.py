@@ -261,7 +261,7 @@ class CarController:
                     hud_control.lanesVisible, fcw_display, acc_alert, steer_required)
       self.cruise_setting = CS.cruise_setting
 
-      if not CS.out.cruiseState.available:
+      if not CS.out.cruiseState.available and self.last_lkas:
         self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', False)
         self.last_lkas = False
 
