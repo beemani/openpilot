@@ -574,7 +574,11 @@ class Controls:
 
     # Check which actuators can be enabled
     standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
-    CC.latActive = ((self.active or self.params.get_bool('SEMIPILOT_SteerAlwaysOn')) and not self.events.any(ET.OVERRIDE_LATERAL)) and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
+
+    if self.events.any(ET.OVERRIDE_LATERAL):
+      self.last_lateral_override = self.sm.frame
+    recent_lateral_override = (self.sm.frame - self.last_lateral_override) * DT_CTRL < 2.0
+    CC.latActive = ((self.active or self.params.get_bool('SEMIPILOT_SteerAlwaysOn')) and not recent_lateral_override) and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
                    (not standstill or self.joystick_mode)
     CC.longActive = self.enabled and not self.events.any(ET.OVERRIDE_LONGITUDINAL) and self.CP.openpilotLongitudinalControl
 
