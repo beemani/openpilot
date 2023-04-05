@@ -127,7 +127,7 @@ class CarController:
 
     self.params2 = Params()
     self.last_distance = 3 if not self.params2.get("SEMIPILOT_distance") else int(self.params2.get("SEMIPILOT_distance"))
-    self.last_lkas = 0
+    self.last_lkas = False
     self.cruise_setting = 0
     self.prev_cruise_setting = 0
     self.hold_counter = 0
@@ -261,6 +261,10 @@ class CarController:
                     hud_control.lanesVisible, fcw_display, acc_alert, steer_required)
       self.cruise_setting = CS.cruise_setting
 
+      if not CS.out.cruiseState.available:
+        self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', False)
+        self.last_lkas = False
+
       if (self.cruise_setting != self.prev_cruise_setting or self.hold_counter > 4) and self.hold_ready:
         if self.cruise_setting == 0 or self.hold_counter > 4:
           if self.prev_cruise_setting == 3:
@@ -278,8 +282,8 @@ class CarController:
               self.hold_ready = False
             else:
               # lkas press
-              self.last_lkas = (self.last_lkas + 1) % 2
-              if self.last_lkas == 1:
+              self.last_lkas = not self.last_lkas
+              if self.last_lkas:
                 self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', True)
               else:
                 self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', False)
