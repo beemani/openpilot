@@ -282,11 +282,12 @@ class CarController:
               self.hold_ready = False
             else:
               # lkas press
-              self.last_lkas = not self.last_lkas
-              if self.last_lkas:
-                self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', True)
-              else:
-                self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', False)
+              if CS.out.cruiseState.available
+                self.last_lkas = not self.last_lkas
+                if self.last_lkas:
+                  self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', True)
+                else:
+                  self.params2.put_bool('SEMIPILOT_SteerAlwaysOn', False)
           self.hold_counter = 0
       else:
         if self.cruise_setting != 0:
