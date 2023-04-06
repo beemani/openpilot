@@ -64,7 +64,7 @@ if params2.get("SEMIPILOT_distance") is None:
   params2.put("SEMIPILOT_distance", str(3))
 
 def get_T_FOLLOW():
-  distance = int(params2.get("SEMIPILOT_distance"))
+  distance = 3 if params2.get("SEMIPILOT_distance") is None else int(params2.get("SEMIPILOT_distance"))
   if distance==0:
     return 1.8
   elif distance==3:
