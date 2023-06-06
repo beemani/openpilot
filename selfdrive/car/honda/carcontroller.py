@@ -126,7 +126,8 @@ class CarController:
     self.last_steer = 0.0
 
     self.params2 = Params()
-    self.last_distance = 3 if not self.params2.get("SEMIPILOT_distance") else int(self.params2.get("SEMIPILOT_distance"))
+    #self.last_distance = 3 if not self.params2.get("SEMIPILOT_distance") else int(self.params2.get("SEMIPILOT_distance"))
+    self.last_distance = 3
     self.last_lkas = False
     self.cruise_setting = 0
     self.prev_cruise_setting = 0
@@ -275,7 +276,7 @@ class CarController:
             else:
               # distance press
               self.last_distance = (self.last_distance - 1) % 4
-              put_nonblocking("SEMIPILOT_distance", str(self.last_distance))
+              #put_nonblocking("SEMIPILOT_distance", str(self.last_distance))
           if self.prev_cruise_setting == 1:
             if self.hold_counter > 4:
               # lkas hold

@@ -42,7 +42,6 @@ def manager_init() -> None:
     ("HasAcceptedTerms", "0"),
     ("LanguageSetting", "main_en"),
     ("OpenpilotEnabledToggle", "1"),
-    ("SEMIPILOT_distance", "3"),
     ("SEMIPILOT_SteerAlwaysOn", "0"),
   ]
   if not PC:
