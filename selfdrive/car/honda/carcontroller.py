@@ -8,8 +8,7 @@ from selfdrive.car import create_gas_interceptor_command
 from selfdrive.car.honda import hondacan
 from selfdrive.car.honda.values import CruiseButtons, VISUAL_HUD, HONDA_BOSCH, HONDA_BOSCH_RADARLESS, HONDA_NIDEC_ALT_PCM_ACCEL, CarControllerParams
 from selfdrive.controls.lib.drive_helpers import rate_limit
-from common.params import Params, put_bool_nonblocking
-#from common.params import Params, put_nonblocking, put_bool_nonblocking
+from common.params import Params, put_nonblocking, put_bool_nonblocking
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LongCtrlState = car.CarControl.Actuators.LongControlState
@@ -127,8 +126,7 @@ class CarController:
     self.last_steer = 0.0
 
     self.params2 = Params()
-    #self.last_distance = 3 if not self.params2.get("SEMIPILOT_distance") else int(self.params2.get("SEMIPILOT_distance"))
-    self.last_distance = 3
+    self.last_distance = 3 if not self.params2.get("LongitudinalPersonality") else int(self.params2.get("LongitudinalPersonality"))
     self.last_lkas = False
     self.cruise_setting = 0
     self.prev_cruise_setting = 0
@@ -276,8 +274,8 @@ class CarController:
               put_bool_nonblocking("ExperimentalMode", not self.params2.get_bool("ExperimentalMode"))
             else:
               # distance press
-              self.last_distance = (self.last_distance - 1) % 4
-              #put_nonblocking("SEMIPILOT_distance", str(self.last_distance))
+              self.last_distance = (self.last_distance - 1) % 3
+              put_nonblocking("LongitudinalPersonality", str(self.last_distance))
           if self.prev_cruise_setting == 1:
             if self.hold_counter > 4:
               # lkas hold
