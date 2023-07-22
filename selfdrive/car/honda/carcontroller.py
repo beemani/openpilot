@@ -274,6 +274,7 @@ class CarController:
               put_bool_nonblocking("ExperimentalMode", not self.params2.get_bool("ExperimentalMode"))
             else:
               # distance press
+              self.last_distance = 1 if not self.params2.get("LongitudinalPersonality") else int(self.params2.get("LongitudinalPersonality"))
               self.last_distance = self.last_distance - 1 if self.last_distance > 0 else 2
               put_nonblocking("LongitudinalPersonality", str(self.last_distance))
           if self.prev_cruise_setting == 1:
