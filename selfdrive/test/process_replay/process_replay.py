@@ -16,17 +16,17 @@ import cereal.messaging as messaging
 from cereal import car
 from cereal.services import service_list
 from cereal.visionipc import VisionIpcServer, get_endpoint_name as vipc_get_endpoint_name
-from common.params import Params
-from common.timeout import Timeout
-from common.realtime import DT_CTRL
+from openpilot.common.params import Params
+from openpilot.common.timeout import Timeout
+from openpilot.common.realtime import DT_CTRL
 from panda.python import ALTERNATIVE_EXPERIENCE
-from selfdrive.car.car_helpers import get_car, interfaces
-from selfdrive.manager.process_config import managed_processes
-from selfdrive.test.process_replay.helpers import OpenpilotPrefix, DummySocket
-from selfdrive.test.process_replay.vision_meta import meta_from_camera_state, available_streams
-from selfdrive.test.process_replay.migration import migrate_all
-from selfdrive.test.process_replay.capture import ProcessOutputCapture
-from tools.lib.logreader import LogReader
+from openpilot.selfdrive.car.car_helpers import get_car, interfaces
+from openpilot.selfdrive.manager.process_config import managed_processes
+from openpilot.selfdrive.test.process_replay.helpers import OpenpilotPrefix, DummySocket
+from openpilot.selfdrive.test.process_replay.vision_meta import meta_from_camera_state, available_streams
+from openpilot.selfdrive.test.process_replay.migration import migrate_all
+from openpilot.selfdrive.test.process_replay.capture import ProcessOutputCapture
+from openpilot.tools.lib.logreader import LogReader
 
 # Numpy gives different results based on CPU features after version 19
 NUMPY_TOLERANCE = 1e-7
@@ -54,14 +54,14 @@ class ReplayContext:
     assert(len(self.pubs) != 0 or self.main_pub is not None)
 
   def __enter__(self):
-    self.open()
+    self.open_context()
 
     return self
 
   def __exit__(self, exc_type, exc_obj, exc_tb):
-    self.close()
+    self.close_context()
 
-  def open(self):
+  def open_context(self):
     messaging.toggle_fake_events(True)
     messaging.set_fake_prefix(self.proc_name)
 
@@ -73,7 +73,7 @@ class ReplayContext:
     else:
       self.events = {self.main_pub: messaging.fake_event_handle(self.main_pub, enable=True)}
 
-  def close(self):
+  def close_context(self):
     del self.events
 
     messaging.toggle_fake_events(False)
@@ -123,7 +123,6 @@ class ProcessConfig:
   should_recv_callback: Optional[Callable] = None
   tolerance: Optional[float] = None
   processing_time: float = 0.001
-  field_tolerances: Dict[str, float] = field(default_factory=dict)
   timeout: int = 30
   simulation: bool = True
   main_pub: Optional[str] = None
@@ -211,7 +210,7 @@ class ProcessContainer:
         self.cfg.config_callback(params, self.cfg, all_msgs)
 
       self.rc = ReplayContext(self.cfg)
-      self.rc.open()
+      self.rc.open_context()
 
       self.pm = messaging.PubMaster(self.cfg.pubs)
       self.sockets = [messaging.sub_sock(s, timeout=100) for s in self.cfg.subs]
@@ -237,7 +236,7 @@ class ProcessContainer:
     with self.prefix:
       self.process.signal(signal.SIGKILL)
       self.process.stop()
-      self.rc.close()
+      self.rc.close_context()
       self.prefix.clean_dirs()
 
   def run_step(self, msg: capnp._DynamicStructReader, frs: Optional[Dict[str, Any]]) -> List[capnp._DynamicStructReader]:
@@ -434,13 +433,6 @@ def laikad_config_pubsub_callback(params, cfg, lr):
   cfg.main_pub_drained = True
 
 
-def locationd_config_pubsub_callback(params, cfg, lr):
-  ublox = params.get_bool("UbloxAvailable")
-  sub_keys = ({"gpsLocation", } if ublox else {"gpsLocationExternal", })
-
-  cfg.pubs = set(cfg.pubs) - sub_keys
-
-
 CONFIGS = [
   ProcessConfig(
     proc_name="controlsd",
@@ -495,12 +487,11 @@ CONFIGS = [
   ProcessConfig(
     proc_name="locationd",
     pubs=[
-      "cameraOdometry", "accelerometer", "gyroscope", "gpsLocationExternal",
-      "liveCalibration", "carState", "carParams", "gpsLocation"
+      "cameraOdometry", "accelerometer", "gyroscope", "gnssMeasurements",
+      "liveCalibration", "carState", "carParams"
     ],
     subs=["liveLocationKalman"],
     ignore=["logMonoTime", "valid"],
-    config_callback=locationd_config_pubsub_callback,
     tolerance=NUMPY_TOLERANCE,
   ),
   ProcessConfig(
@@ -672,11 +663,11 @@ def _replay_multi_process(
     containers = []
     for cfg in cfgs:
       container = ProcessContainer(cfg)
-      container.start(params_config, env_config, all_msgs, fingerprint, captured_output_store is not None)
       containers.append(container)
+      container.start(params_config, env_config, all_msgs, fingerprint, captured_output_store is not None)
 
-    all_pubs = set([pub for container in containers for pub in container.pubs])
-    all_subs = set([sub for container in containers for sub in container.subs])
+    all_pubs = {pub for container in containers for pub in container.pubs}
+    all_subs = {sub for container in containers for sub in container.subs}
     lr_pubs = all_pubs - all_subs
     pubs_to_containers = {pub: [container for container in containers if pub in container.pubs] for pub in all_pubs}
 

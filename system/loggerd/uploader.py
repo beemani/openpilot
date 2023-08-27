@@ -13,13 +13,13 @@ from typing import BinaryIO, Iterator, List, Optional, Tuple, Union
 
 from cereal import log
 import cereal.messaging as messaging
-from common.api import Api
-from common.params import Params
-from common.realtime import set_core_affinity
-from system.hardware import TICI
-from system.loggerd.xattr_cache import getxattr, setxattr
-from system.loggerd.config import ROOT
-from system.swaglog import cloudlog
+from openpilot.common.api import Api
+from openpilot.common.params import Params
+from openpilot.common.realtime import set_core_affinity
+from openpilot.system.hardware import TICI
+from openpilot.system.loggerd.xattr_cache import getxattr, setxattr
+from openpilot.system.loggerd.config import ROOT
+from openpilot.system.swaglog import cloudlog
 
 NetworkType = log.DeviceState.NetworkType
 UPLOAD_ATTR_NAME = 'user.upload'
@@ -46,7 +46,7 @@ class FakeResponse:
 UploadResponse = Union[requests.Response, FakeResponse]
 
 def get_directory_sort(d: str) -> List[str]:
-  return list(map(lambda s: s.rjust(10, '0'), d.rsplit('--', 1)))
+  return [s.rjust(10, '0') for s in d.rsplit('--', 1)]
 
 def listdir_by_creation(d: str) -> List[str]:
   try:
