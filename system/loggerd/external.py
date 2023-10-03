@@ -17,6 +17,7 @@ def is_mounted(mount_point):
   except OSError:
     # If we can't read from the mount, it's likely the device was unplugged without unmounting
     subprocess.call(["umount", "-f", mount_point])
+    print("Device forcefully unmounted")
     return False
 
   return True
@@ -53,23 +54,33 @@ def format_and_mount(device):
   if not os.path.exists("/data/external"):
     os.mkdir("/data/external")
   subprocess.call(["mount", partition, "/data/external"])
+  print("Device mounted")
 
   # If the specific directory structure doesn't exist, format the device
   if not os.path.exists("/data/external/media/0/realdata/"):
+    print("New device detected")
+
     # Unmount the device if it's mounted
     subprocess.call(["umount", partition])
+    print("Device unmounted")
 
     # Delete all partitions and create a new one
     subprocess.call(["sfdisk", "--delete", device])
     subprocess.call(["bash", "-c", "echo ';' | sfdisk {}".format(device)])
+    print("Deleting partitions")
 
     # Format the new partition to ext4
     subprocess.call(["mkfs.ext4", "-F", partition])
+    print("Formatting device")
 
     # Create the directory structure if it doesn't exist
     nested_dir = "/data/external/media/0/realdata/"
     if not os.path.exists(nested_dir):
       os.makedirs(nested_dir)
+      print("Created device folders")
+
+    subprocess.call(["mount", partition, "/data/external"])
+    print("Device mounted")
 
 
 def external_thread(exit_event):
@@ -77,14 +88,14 @@ def external_thread(exit_event):
     mount_point = "/data/external"
     if is_mounted(mount_point):
       print("{} is currently mounted.".format(mount_point))
-      time.sleep(30)
+      time.sleep(5)
     else:
       device = detect_usb_or_nvme()
       if device:
         format_and_mount(device)
-        time.sleep(30)  # wait for 30 seconds after formatting and mounting
+        time.sleep(5)  # wait for 30 seconds after formatting and mounting
 
-    time.sleep(30)  # check every 30 seconds for a new device
+    time.sleep(5)  # check every 30 seconds for a new device
 
 
 def main():
