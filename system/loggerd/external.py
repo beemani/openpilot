@@ -49,6 +49,11 @@ def detect_usb_or_nvme():
 def format_and_mount(device):
   partition = device + "1"
 
+  # Mount the device
+  if not os.path.exists("/data/external"):
+    os.mkdir("/data/external")
+  subprocess.call(["mount", partition, "/data/external"])
+
   # If the specific directory structure doesn't exist, format the device
   if not os.path.exists("/data/external/media/0/realdata/"):
     # Unmount the device if it's mounted
@@ -61,15 +66,10 @@ def format_and_mount(device):
     # Format the new partition to ext4
     subprocess.call(["mkfs.ext4", "-F", partition])
 
-  # Mount the device
-  if not os.path.exists("/data/external"):
-    os.mkdir("/data/external")
-  subprocess.call(["mount", partition, "/data/external"])
-
-  # Create the directory structure if it doesn't exist
-  nested_dir = "/data/external/media/0/realdata/"
-  if not os.path.exists(nested_dir):
-    os.makedirs(nested_dir)
+    # Create the directory structure if it doesn't exist
+    nested_dir = "/data/external/media/0/realdata/"
+    if not os.path.exists(nested_dir):
+      os.makedirs(nested_dir)
 
 
 def external_thread(exit_event):
