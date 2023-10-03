@@ -18,6 +18,10 @@ class Paths:
       return '/data/media/0/realdata/'
 
   @staticmethod
+  def log_root_external() -> str:
+    return '/data_external/media/0/realdata/'
+
+  @staticmethod
   def swaglog_root() -> str:
     if PC:
       return os.path.join(Paths.comma_home(), "log")
