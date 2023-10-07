@@ -23,14 +23,14 @@ sudo chown -R comma:comma /data/media/1/
 ```
 
 
-## After Connecting/Reboot
+## To Mount
 Mount the storage device:
 ```
 sudo mount /dev/sdg1 /data/media/1
 ```
 
 
-## To Remove
+## To Unmount
 Unmount the storage device:
 ```
 sudo umount /dev/sdg1
