@@ -92,6 +92,7 @@ def deleter_thread(exit_event):
 
           if any(name.endswith(".lock") for name in os.listdir(move_from)):
             continue
+            
           try:
             cloudlog.info(f"moving {move_from} to {move_to}")
             shutil.move(move_from, move_to)
