@@ -17,6 +17,10 @@ Create realdata folder:
 ```
 sudo mkdir /data/media/1/realdata
 ```
+Set permissions:
+```
+sudo chown -R comma:comma /data/media/1/
+```
 
 
 ## After Connecting/Reboot
