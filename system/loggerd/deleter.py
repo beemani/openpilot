@@ -64,9 +64,8 @@ def deleter_thread(exit_event):
         # If the external storage is out of space, delete from it.
         if out_of_bytes_external or out_of_percent_external:
           dirs = listdir_by_creation(external_path)
-          preserved_dirs = get_preserved_segments(dirs)
 
-          for delete_dir in sorted(dirs, key=lambda d: (d in DELETE_LAST, d in preserved_dirs)):
+          for delete_dir in dirs:
             delete_path = os.path.join(external_path, delete_dir)
 
             if any(name.endswith(".lock") for name in os.listdir(delete_path)):
@@ -85,9 +84,8 @@ def deleter_thread(exit_event):
 
         # Move data from internal to external.
         dirs = listdir_by_creation(internal_path)
-        preserved_dirs = get_preserved_segments(dirs)
 
-        for move_dir in sorted(dirs, key=lambda d: (d in DELETE_LAST, d in preserved_dirs)):
+        for delete_dir in dirs:
           move_from = os.path.join(internal_path, move_dir)
           move_to = os.path.join(external_path, move_dir)
 
