@@ -7,7 +7,7 @@ sudo mkdir -p /data/media/1
 ```
 Format storage device:
 ```
-$ sudo mkfs.ext4 /dev/sdg1
+sudo mkfs.ext4 /dev/sdg1
 ```
 Mount the storage device:
 ```
