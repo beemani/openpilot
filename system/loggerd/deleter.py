@@ -53,7 +53,9 @@ def deleter_thread(exit_event):
     internal_path = PATH_DICT["internal"]
     external_path = PATH_DICT["external"]
 
+    # If the internal storage is out of space
     if out_of_percent_internal or out_of_bytes_internal:
+
       # Check if the external mount is alive.
       if os.path.isdir(external_path):
         out_of_bytes_external = get_available_bytes(path_type="external", default=MIN_BYTES + 1) < MIN_BYTES
@@ -63,10 +65,13 @@ def deleter_thread(exit_event):
         if out_of_bytes_external or out_of_percent_external:
           dirs = listdir_by_creation(external_path)
           preserved_dirs = get_preserved_segments(dirs)
+
           for delete_dir in sorted(dirs, key=lambda d: (d in DELETE_LAST, d in preserved_dirs)):
             delete_path = os.path.join(external_path, delete_dir)
+
             if any(name.endswith(".lock") for name in os.listdir(delete_path)):
               continue
+
             try:
               cloudlog.info(f"deleting {delete_path}")
               if os.path.isfile(delete_path):
@@ -81,6 +86,7 @@ def deleter_thread(exit_event):
         # Move data from internal to external.
         dirs = listdir_by_creation(internal_path)
         preserved_dirs = get_preserved_segments(dirs)
+
         for move_dir in sorted(dirs, key=lambda d: (d in DELETE_LAST, d in preserved_dirs)):
           move_from = os.path.join(internal_path, move_dir)
           move_to = os.path.join(external_path, move_dir)
@@ -99,10 +105,13 @@ def deleter_thread(exit_event):
       else:
         dirs = listdir_by_creation(internal_path)
         preserved_dirs = get_preserved_segments(dirs)
+
         for delete_dir in sorted(dirs, key=lambda d: (d in DELETE_LAST, d in preserved_dirs)):
           delete_path = os.path.join(internal_path, delete_dir)
+
           if any(name.endswith(".lock") for name in os.listdir(delete_path)):
             continue
+
           try:
             cloudlog.info(f"deleting {delete_path}")
             if os.path.isfile(delete_path):
@@ -113,6 +122,7 @@ def deleter_thread(exit_event):
           except OSError:
             cloudlog.exception(f"issue deleting {delete_path}")
         exit_event.wait(.1)
+
     else:
       exit_event.wait(30)
 
