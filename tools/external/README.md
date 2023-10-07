@@ -13,7 +13,7 @@ Mount the storage device:
 ```
 sudo mount /dev/sdg1 /data/media/1
 ```
-* Create realdata folder:
+Create realdata folder:
 ```
 sudo mkdir /data/media/1/realdata
 ```
