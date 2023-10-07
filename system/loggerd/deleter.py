@@ -84,10 +84,11 @@ def deleter_thread(exit_event):
 
         # Move data from internal to external.
         dirs = listdir_by_creation(internal_path)
+        preserved_dirs = get_preserved_segments(dirs)
 
-        for delete_dir in dirs:
-          move_from = os.path.join(internal_path, move_dir)
-          move_to = os.path.join(external_path, move_dir)
+        for delete_dir in sorted(dirs, key=lambda d: (d in DELETE_LAST, d in preserved_dirs)):
+          move_from = os.path.join(internal_path, delete_dir)
+          move_to = os.path.join(external_path, delete_dir)
 
           if any(name.endswith(".lock") for name in os.listdir(move_from)):
             continue
