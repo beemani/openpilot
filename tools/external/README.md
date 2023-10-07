@@ -1,7 +1,7 @@
 # External Storage
 
 ## Initial Setup
-Create the mount point:
+Create mount point:
 ```
 sudo mkdir -p /data/media/1
 ```
@@ -9,7 +9,7 @@ Format storage device:
 ```
 sudo mkfs.ext4 /dev/sdg1
 ```
-Mount the storage device:
+Mount storage device:
 ```
 sudo mount /dev/sdg1 /data/media/1
 ```
@@ -24,14 +24,14 @@ sudo chown -R comma:comma /data/media/1/
 
 
 ## To Mount
-Mount the storage device:
+Mount storage device:
 ```
 sudo mount /dev/sdg1 /data/media/1
 ```
 
 
 ## To Unmount
-Unmount the storage device:
+Unmount storage device:
 ```
 sudo umount /dev/sdg1
 ```
