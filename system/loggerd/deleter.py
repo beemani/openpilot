@@ -57,7 +57,7 @@ def deleter_thread(exit_event):
     if out_of_percent_internal or out_of_bytes_internal:
 
       # Check if the external mount is alive.
-      if os.path.isdir(external_path):
+      if os.path.ismount('/data/media/1') and os.path.exists(external_path):
         out_of_bytes_external = get_available_bytes(path_type="external", default=MIN_BYTES + 1) < MIN_BYTES
         out_of_percent_external = get_available_percent(path_type="external", default=MIN_PERCENT + 1) < MIN_PERCENT
 
