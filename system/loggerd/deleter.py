@@ -8,7 +8,6 @@ from openpilot.system.swaglog import cloudlog
 from openpilot.system.loggerd.config import get_available_bytes, get_available_percent
 from openpilot.system.loggerd.uploader import listdir_by_creation
 from openpilot.system.loggerd.xattr_cache import getxattr
-from openpilot.system.loggerd.external import is_mounted
 
 MIN_BYTES = 5 * 1024 * 1024 * 1024
 MIN_PERCENT = 10
@@ -56,7 +55,7 @@ def deleter_thread(exit_event):
 
     if out_of_percent_internal or out_of_bytes_internal:
       # Check if the external mount is alive.
-      if is_mounted(external_path):
+      if os.path.isdir(external_path):
         out_of_bytes_external = get_available_bytes(path_type="external", default=MIN_BYTES + 1) < MIN_BYTES
         out_of_percent_external = get_available_percent(path_type="external", default=MIN_PERCENT + 1) < MIN_PERCENT
 
