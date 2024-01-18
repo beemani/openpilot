@@ -92,6 +92,7 @@ class CAR(StrEnum):
   SANTA_FE_HEV_2022 = "HYUNDAI SANTA FE HYBRID 2022"
   SANTA_FE_PHEV_2022 = "HYUNDAI SANTA FE PlUG-IN HYBRID 2022"
   SONATA = "HYUNDAI SONATA 2020"
+  SONATA_2ND_GEN = "HYUNDAI SONATA 2ND GEN"
   SONATA_LF = "HYUNDAI SONATA 2019"
   STARIA_4TH_GEN = "HYUNDAI STARIA 4TH GEN"
   TUCSON = "HYUNDAI TUCSON 2019"
@@ -204,6 +205,7 @@ CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
   CAR.SANTA_FE_PHEV_2022: HyundaiCarInfo("Hyundai Santa Fe Plug-in Hybrid 2022-23", "All", car_parts=CarParts.common([CarHarness.hyundai_l])),
   CAR.SONATA: HyundaiCarInfo("Hyundai Sonata 2020-23", "All", video_link="https://www.youtube.com/watch?v=ix63r9kE3Fw",
                              car_parts=CarParts.common([CarHarness.hyundai_a])),
+  CAR.SONATA_2ND_GEN: HyundaiCarInfo("Hyundai Sonata 2024", "All", car_parts=CarParts.common([CarHarness.hyundai_a])),
   CAR.STARIA_4TH_GEN: HyundaiCarInfo("Hyundai Staria 2023", "All", car_parts=CarParts.common([CarHarness.hyundai_k])),
   CAR.SONATA_LF: HyundaiCarInfo("Hyundai Sonata 2018-19", car_parts=CarParts.common([CarHarness.hyundai_e])),
   CAR.TUCSON: [
@@ -486,7 +488,7 @@ CANFD_CAR = {CAR.KIA_EV6, CAR.IONIQ_5, CAR.IONIQ_6, CAR.TUCSON_4TH_GEN, CAR.TUCS
              CAR.SANTA_CRUZ_1ST_GEN, CAR.KIA_SPORTAGE_5TH_GEN, CAR.GENESIS_GV70_1ST_GEN, CAR.KIA_SORENTO_PHEV_4TH_GEN,
              CAR.GENESIS_GV60_EV_1ST_GEN, CAR.KIA_SORENTO_4TH_GEN, CAR.KIA_NIRO_HEV_2ND_GEN, CAR.KIA_NIRO_EV_2ND_GEN,
              CAR.GENESIS_GV80, CAR.KIA_CARNIVAL_4TH_GEN, CAR.KIA_SORENTO_HEV_4TH_GEN, CAR.KONA_EV_2ND_GEN, CAR.KIA_K8_HEV_1ST_GEN,
-             CAR.STARIA_4TH_GEN, CAR.KONA_2ND_GEN}
+             CAR.STARIA_4TH_GEN, CAR.KONA_2ND_GEN, CAR.SONATA_2ND_GEN}
 
 # The radar does SCC on these cars when HDA I, rather than the camera
 CANFD_RADAR_SCC_CAR = {CAR.GENESIS_GV70_1ST_GEN, CAR.KIA_SORENTO_PHEV_4TH_GEN, CAR.KIA_SORENTO_4TH_GEN, CAR.GENESIS_GV80,
@@ -590,4 +592,5 @@ DBC = {
   CAR.KIA_NIRO_PHEV_2022: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar_generated'),
   CAR.STARIA_4TH_GEN: dbc_dict('hyundai_canfd', None),
   CAR.KONA_2ND_GEN: dbc_dict('hyundai_canfd', None),
+  CAR.SONATA_2ND_GEN: dbc_dict('hyundai_canfd', None),
 }

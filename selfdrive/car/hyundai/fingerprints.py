@@ -392,6 +392,14 @@ FW_VERSIONS = {
       b'\xf1\x87SANFB45889451GC7wx\x87\x88gw\x87x\x88\x88x\x88\x87wxw\x87wxw\x87\x8f\xfc\xffeU\x8f\xff+Q\xf1\x81U913\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U913\x00\x00\x00\x00\x00\x00SDN8T16NB2\n\xdd^\xbc',
     ],
   },
+  CAR.SONATA_2ND_GEN: {
+    (Ecu.fwdRadar, 0x7d0, None): [
+      b'\xf1\x00DN8_ RDR -----      1.00 1.00 99110-L1800         ',
+    ],
+    (Ecu.fwdCamera, 0x7c4, None): [
+      b'\xf1\x00DN8 MFC  AT KOR LHD 1.00 1.01 99211-L1800 230512',
+    ],
+  },
   CAR.SONATA_LF: {
     (Ecu.fwdRadar, 0x7d0, None): [
       b'\xf1\x00LF__ SCC F-CUP      1.00 1.00 96401-C2200         ',
